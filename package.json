@@ -4,8 +4,7 @@
   "description": "A Node.js backend application for handling image generation and Google Cloud integration",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "postinstall": "npx hardhat compile"
+    "start": "node server.js"
   },
   "dependencies": {
     "@nomiclabs/hardhat-ethers": "^2.2.3",
