@@ -1,0 +1,55 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const fs = require('fs');
+const path = require('path');
+const { exec } = require('child_process');
+const cors = require('cors');
+
+const app = express();
+const PORT = process.env.PORT || 8080;
+
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.get('/', (req, res) => {
+  res.send('Welcome to the server!');
+});
+
+app.post('/api/compileContract', async (req, res) => {
+  const { contractCode, contractName } = req.body;
+  console.log(contractName);
+  const filePath = path.join(__dirname, 'stuff', 'contracts', `${contractName}.sol`);
+  console.log('File path for contract:', filePath);
+
+  try {
+    fs.writeFileSync(filePath, contractCode);
+
+    exec('npx hardhat compile', (error, stdout, stderr) => {
+      if (error) {
+        console.error('Error compiling contract:', error);
+        return res.status(500).json({ success: false, error: 'Compilation failed' });
+      }
+
+      console.log('Compilation stdout:', stdout);
+      console.error('Compilation stderr:', stderr);
+
+      const artifactPath = path.join(__dirname, 'stuff', 'artifacts', 'stuff', 'contracts', `${contractName}.sol`, `${contractName}.json`);
+      if (!fs.existsSync(artifactPath)) {
+        return res.status(500).json({ success: false, error: 'Compiled artifact not found' });
+      }
+
+      const artifact = JSON.parse(fs.readFileSync(artifactPath));
+      const { abi, bytecode } = artifact;
+      
+      res.json({ success: true, abi, bytecode });
+    });
+
+  } catch (error) {
+    console.error('Error handling compile request:', error);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

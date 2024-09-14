@@ -1,0 +1,19 @@
+{
+  "name": "my-backend",
+  "version": "1.0.0",
+  "description": "A Node.js backend application for handling image generation and Google Cloud integration",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "postinstall": "npx hardhat compile"
+  },
+  "dependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@openzeppelin/contracts": "^5.0.2",
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "hardhat": "^2.22.10"
+  },
+  "author": "Your Name",
+  "license": "MIT"
+}
