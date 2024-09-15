@@ -4,16 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
 const cors = require('cors');
-const https = require('https'); // Import the https module
-
 
 const app = express();
 const PORT = process.env.PORT || 8080;
-
-const httpsOptions = {
-  key: fs.readFileSync('./server.key'),
-  cert: fs.readFileSync('./server.cert')
-};
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -81,6 +74,6 @@ app.post('/api/compileContract', async (req, res) => {
   }
 });
 
-https.createServer(httpsOptions, app).listen(PORT, '0.0.0.0', () => {
-  console.log(`HTTPS Server running on port ${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
 });
