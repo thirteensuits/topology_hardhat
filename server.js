@@ -10,8 +10,8 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 const httpsOptions = {
-  key: fs.readFileSync('./server.key'),
-  cert: fs.readFileSync('./server.cert')
+  key: fs.readFileSync('/etc/letsencrypt/live/themugle.shop/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/themugle.shop/fullchain.pem')
 };
 
 app.use(cors());
